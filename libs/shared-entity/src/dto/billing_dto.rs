@@ -106,7 +106,7 @@ pub struct WorkspaceSubscriptionStatus {
   pub current_period_end: i64,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct WorkspaceUsageAndLimit {
   pub member_count: i64,
   pub member_count_limit: i64,
