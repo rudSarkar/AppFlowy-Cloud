@@ -148,3 +148,8 @@ pub enum Currency {
   #[default]
   USD,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SubscriptionTrialRequest {
+  pub plan: SubscriptionPlan,
+}
