@@ -215,3 +215,12 @@ pub struct AFChatMessageRow {
   pub content: String,
   pub created_at: DateTime<Utc>,
 }
+
+// pub struct RecentCommentEventRow {
+//   pub comment_id: Uuid,
+//   pub user: Option<AFWebUserRow>,
+//   pub created_at: DateTime<Utc>,
+//   pub content: String,
+//   pub view_name: String,
+//   pub view_id: Uuid,
+// }

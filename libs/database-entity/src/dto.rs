@@ -908,6 +908,16 @@ pub struct DeleteReactionParams {
   pub comment_id: Uuid,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct RecentCommentEvent {
+  pub comment_id: Uuid,
+  pub user: Option<AFWebUser>,
+  pub created_at: DateTime<Utc>,
+  pub content: String,
+  pub view_name: String,
+  pub view_id: Uuid,
+}
+
 /// Indexing status of a document.
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum IndexingStatus {

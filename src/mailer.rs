@@ -1,3 +1,4 @@
+use database_entity::dto::GlobalComment;
 use lettre::message::header::ContentType;
 use lettre::message::Message;
 use lettre::transport::smtp::authentication::Credentials;
@@ -75,6 +76,30 @@ impl Mailer {
     AsyncTransport::send(&self.smtp_transport, email).await?;
     Ok(())
   }
+
+  pub async fn send_notification(
+    &self,
+    email: String,
+    param: NotificationMailerParam,
+  ) -> Result<(), anyhow::Error> {
+    let rendered = HANDLEBARS.read().unwrap().render("notification", &param)?;
+
+    let email = Message::builder()
+      .from(lettre::message::Mailbox::new(
+        Some("AppFlowy Notification".to_string()),
+        self.smtp_username.parse::<Address>()?,
+      ))
+      .to(lettre::message::Mailbox::new(
+        Some(param.username.clone()),
+        email.parse().unwrap(),
+      ))
+      .subject(format!("You have new comments in AppFlowy",))
+      .header(ContentType::TEXT_HTML)
+      .body(rendered)?;
+
+    AsyncTransport::send(&self.smtp_transport, email).await?;
+    Ok(())
+  }
 }
 
 #[derive(serde::Serialize)]
@@ -85,4 +110,10 @@ pub struct WorkspaceInviteMailerParam {
   pub workspace_icon_url: String,
   pub workspace_member_count: String,
   pub accept_url: String,
+}
+
+#[derive(serde::Serialize)]
+pub struct NotificationMailerParam {
+  pub username: String,
+  pub new_comments: Vec<GlobalComment>,
 }

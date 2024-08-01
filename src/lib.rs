@@ -5,6 +5,7 @@ pub mod config;
 pub mod domain;
 pub mod mailer;
 pub mod middleware;
+pub mod notification;
 mod self_signed;
 pub mod state;
 pub mod telemetry;
