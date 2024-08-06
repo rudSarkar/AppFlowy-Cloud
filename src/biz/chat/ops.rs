@@ -82,9 +82,10 @@ pub async fn generate_chat_message_answer(
   chat_id: &str,
   ai_model: AIModel,
 ) -> Result<ChatMessage, AppError> {
-  let content = chat::chat_ops::select_chat_message_content(pg_pool, question_message_id).await?;
+  let (content, metadata) =
+    chat::chat_ops::select_chat_message_content(pg_pool, question_message_id).await?;
   let new_answer = ai_client
-    .send_question(chat_id, &content, &ai_model)
+    .send_question(chat_id, &content, Some(metadata), &ai_model)
     .await?;
 
   info!("new_answer: {:?}", new_answer);

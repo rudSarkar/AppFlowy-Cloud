@@ -656,6 +656,7 @@ pub struct CreateChatMessageParams {
 pub struct ChatMessageMetadata {
   pub data: ChatMetadataData,
   pub id: String,
+  /// The name for the context. For example, @xxx, @xx.txt
   pub name: String,
   pub source: String,
 }
