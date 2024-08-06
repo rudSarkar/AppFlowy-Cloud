@@ -693,6 +693,8 @@ pub struct UpdateChatMessageContentParams {
   pub content: String,
   #[serde(default)]
   pub model: AIModel,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub metadata: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Clone, Default, Serialize_repr, Deserialize_repr)]

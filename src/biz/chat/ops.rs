@@ -60,7 +60,7 @@ pub async fn update_chat_message(
   })?;
 
   let new_answer = ai_client
-    .send_question(&params.chat_id, &params.content, &ai_model)
+    .send_question(&params.chat_id, &params.content, params.metadata, &ai_model)
     .await?;
   let _answer = insert_answer_message(
     pg_pool,
@@ -258,7 +258,7 @@ pub async fn create_chat_message_stream(
           ChatAuthor::new(uid, ChatAuthorType::Human),
           &chat_id,
           params.content.clone(),
-          params.metadata,
+          params.metadata.clone(),
       ).await {
           Ok(question) => question,
           Err(err) => {
@@ -284,7 +284,7 @@ pub async fn create_chat_message_stream(
       match params.message_type {
           ChatMessageType::System => {}
           ChatMessageType::User => {
-              let answer = match ai_client.send_question(&chat_id, &params.content, &ai_model).await {
+              let answer = match ai_client.send_question(&chat_id, &params.content, params.metadata, &ai_model).await {
                   Ok(response) => response,
                   Err(err) => {
                       error!("Failed to send question to AI: {}", err);
