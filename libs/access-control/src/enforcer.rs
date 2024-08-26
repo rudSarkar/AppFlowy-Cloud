@@ -156,6 +156,15 @@ where
     Ok(result)
   }
 
+  pub async fn enforce_policy(&self, request: PolicyRequest<'_>) -> Result<bool, AppError> {
+    self
+      .enforcer
+      .read()
+      .await
+      .enforce(request.to_policy())
+      .map_err(|e| AppError::Internal(anyhow!("enforce: {e:?}")))
+  }
+
   #[inline]
   async fn remove_with_enforcer(
     &self,

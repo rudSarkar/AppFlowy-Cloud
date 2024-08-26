@@ -2,6 +2,7 @@ use crate::act::{Action, ActionVariant, Acts};
 use crate::adapter::PgAdapter;
 use crate::enforcer::{AFEnforcer, NoEnforceGroup};
 use crate::metrics::{tick_metric, AccessControlMetrics};
+use crate::request::PolicyRequest;
 
 use anyhow::anyhow;
 use app_error::AppError;
@@ -121,6 +122,10 @@ impl AccessControl {
     } else {
       Ok(true)
     }
+  }
+
+  pub async fn enforce_policy(&self, request: PolicyRequest<'_>) -> Result<bool, AppError> {
+    self.enforcer.enforce_policy(request).await
   }
 }
 
