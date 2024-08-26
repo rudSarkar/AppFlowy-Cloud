@@ -116,7 +116,7 @@ impl AccessControl {
     if enable_access_control() {
       self
         .enforcer
-        .enforce_policy(workspace_id, uid, obj, act)
+        .enforce_workspace_policy(workspace_id, uid, obj, act)
         .await
     } else {
       Ok(true)

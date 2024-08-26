@@ -106,7 +106,7 @@ where
   /// - `Err(AppError)`: If an error occurs during policy enforcement.
   ///
   #[instrument(level = "debug", skip_all)]
-  pub async fn enforce_policy(
+  pub async fn enforce_workspace_policy(
     &self,
     workspace_id: &str,
     uid: &i64,

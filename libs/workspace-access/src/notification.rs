@@ -7,7 +7,6 @@ use tracing::error;
 use tracing::log::warn;
 use uuid::Uuid;
 
-#[allow(dead_code)]
 pub fn spawn_listen_on_workspace_member_change(
   mut listener: broadcast::Receiver<WorkspaceMemberNotification>,
   access_control: AccessControl,

@@ -8,7 +8,6 @@ use tokio::sync::broadcast;
 use tracing::error;
 use tracing::log::warn;
 
-#[allow(dead_code)]
 pub fn spawn_listen_on_collab_member_change(
   pg_pool: PgPool,
   mut listener: broadcast::Receiver<CollabMemberNotification>,

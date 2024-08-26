@@ -52,7 +52,7 @@ async fn collab_group_test() {
   // when the user is the owner of the collab, then the user should have access to the collab
   for action in [Action::Write, Action::Read] {
     let result = enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -83,7 +83,7 @@ async fn workspace_group_policy_test() {
   // test the user has permission to write and read the workspace
   for action in [Action::Write, Action::Read] {
     let result = enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Workspace(workspace_id),
@@ -115,7 +115,7 @@ async fn workspace_owner_and_try_to_full_access_collab_test() {
 
   for action in [Action::Write, Action::Read, Action::Delete] {
     let result = enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -156,7 +156,7 @@ async fn workspace_member_collab_owner_try_to_full_access_collab_test() {
 
   for action in [Action::Write, Action::Read, Action::Delete] {
     let result = enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -197,7 +197,7 @@ async fn workspace_owner_collab_member_try_to_full_access_collab_test() {
 
   for action in [Action::Write, Action::Read, Action::Delete] {
     let result = enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -238,7 +238,7 @@ async fn workspace_member_collab_member_try_to_full_access_collab_test() {
 
   for action in [Action::Write, Action::Read] {
     let result = enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -250,7 +250,7 @@ async fn workspace_member_collab_member_try_to_full_access_collab_test() {
   }
 
   let result = enforcer
-    .enforce_policy(
+    .enforce_workspace_policy(
       workspace_id,
       &uid,
       ObjectType::Collab(object_1),
@@ -284,7 +284,7 @@ async fn workspace_member_but_not_collab_member_and_try_full_access_collab_test(
   // workspace policy as a fallback.
   for action in [Action::Write, Action::Read] {
     let result = enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -296,7 +296,7 @@ async fn workspace_member_but_not_collab_member_and_try_full_access_collab_test(
   }
 
   let result = enforcer
-    .enforce_policy(
+    .enforce_workspace_policy(
       workspace_id,
       &uid,
       ObjectType::Collab(object_1),
@@ -325,7 +325,7 @@ async fn not_workspace_member_but_collab_owner_try_full_access_collab_test() {
 
   for action in [Action::Write, Action::Read, Action::Delete] {
     let result = enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -352,7 +352,7 @@ async fn not_workspace_member_not_collab_member_and_try_full_access_collab_test(
   // perform the action is denied.
   for action in [Action::Write, Action::Read] {
     let result = enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -383,7 +383,7 @@ async fn cmp_owner_role_test() {
 
   for role in [AFRole::Owner, AFRole::Member, AFRole::Guest] {
     assert!(enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Workspace(workspace_id),
@@ -392,7 +392,7 @@ async fn cmp_owner_role_test() {
       .await
       .unwrap());
     assert!(enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -423,7 +423,7 @@ async fn cmp_member_role_test() {
   for role in [AFRole::Owner, AFRole::Member, AFRole::Guest] {
     if role == AFRole::Owner {
       assert!(!enforcer
-        .enforce_policy(
+        .enforce_workspace_policy(
           workspace_id,
           &uid,
           ObjectType::Workspace(workspace_id),
@@ -433,7 +433,7 @@ async fn cmp_member_role_test() {
         .unwrap());
 
       assert!(!enforcer
-        .enforce_policy(
+        .enforce_workspace_policy(
           workspace_id,
           &uid,
           ObjectType::Collab(object_1),
@@ -443,7 +443,7 @@ async fn cmp_member_role_test() {
         .unwrap());
     } else {
       assert!(enforcer
-        .enforce_policy(
+        .enforce_workspace_policy(
           workspace_id,
           &uid,
           ObjectType::Workspace(workspace_id),
@@ -452,7 +452,7 @@ async fn cmp_member_role_test() {
         .await
         .unwrap());
       assert!(enforcer
-        .enforce_policy(
+        .enforce_workspace_policy(
           workspace_id,
           &uid,
           ObjectType::Collab(object_1),
@@ -484,7 +484,7 @@ async fn cmp_guest_role_test() {
   for role in [AFRole::Owner, AFRole::Member, AFRole::Guest] {
     if role == AFRole::Owner || role == AFRole::Member {
       assert!(!enforcer
-        .enforce_policy(
+        .enforce_workspace_policy(
           workspace_id,
           &uid,
           ObjectType::Collab(object_1),
@@ -494,7 +494,7 @@ async fn cmp_guest_role_test() {
         .unwrap());
     } else {
       assert!(enforcer
-        .enforce_policy(
+        .enforce_workspace_policy(
           workspace_id,
           &uid,
           ObjectType::Collab(object_1),
@@ -528,7 +528,7 @@ async fn cmp_full_access_level_test() {
     AFAccessLevel::ReadOnly,
   ] {
     assert!(enforcer
-      .enforce_policy(
+      .enforce_workspace_policy(
         workspace_id,
         &uid,
         ObjectType::Collab(object_1),
@@ -562,7 +562,7 @@ async fn cmp_read_only_level_test() {
   ] {
     if matches!(level, AFAccessLevel::ReadOnly) {
       assert!(enforcer
-        .enforce_policy(
+        .enforce_workspace_policy(
           workspace_id,
           &uid,
           ObjectType::Collab(object_1),
@@ -572,7 +572,7 @@ async fn cmp_read_only_level_test() {
         .unwrap());
     } else {
       assert!(!enforcer
-        .enforce_policy(
+        .enforce_workspace_policy(
           workspace_id,
           &uid,
           ObjectType::Collab(object_1),
