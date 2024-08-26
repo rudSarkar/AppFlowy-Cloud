@@ -200,7 +200,8 @@ where
 fn validate_obj_action(obj: &ObjectType<'_>, act: &ActionVariant) -> Result<(), AppError> {
   match (obj, act) {
     (ObjectType::Workspace(_), ActionVariant::FromRole(_))
-    | (ObjectType::Collab(_), ActionVariant::FromAccessLevel(_)) => Ok(()),
+    | (ObjectType::Collab(_), ActionVariant::FromAccessLevel(_))
+    | (ObjectType::Admin, ActionVariant::FromRole(_)) => Ok(()),
     _ => Err(AppError::Internal(anyhow!(
       "invalid object type and action type combination: object={:?}, action={:?}",
       obj,

@@ -1,0 +1,32 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT subject, object, action FROM af_policy",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "subject",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "object",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "action",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "8974b8858696034249a40da455bf22f5fb191ce20d857187663a9239cc86d19a"
+}

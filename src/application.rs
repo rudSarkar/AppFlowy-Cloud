@@ -1,3 +1,4 @@
+use crate::api::admin::admin_scope;
 use crate::api::metrics::metrics_scope;
 
 use crate::api::file_storage::file_storage_scope;
@@ -6,7 +7,8 @@ use crate::api::user::user_scope;
 use crate::api::workspace::{collab_scope, workspace_scope};
 use crate::api::ws::ws_scope;
 use crate::mailer::Mailer;
-use access_control::access::{enable_access_control, AccessControl};
+use access_control::access::{enable_access_control, AccessControl, ObjectType};
+use access_control::act::ActionVariant;
 
 use crate::api::chat::chat_scope;
 use crate::api::history::history_scope;
@@ -61,6 +63,7 @@ use crate::api::ai::ai_completion_scope;
 use crate::api::search::search_scope;
 use appflowy_collaborate::indexer::IndexerProvider;
 use database::file::s3_client_impl::{AwsS3BucketClientImpl, S3BucketStorage};
+use database_entity::dto::AFRole;
 use tracing::{error, info, warn};
 use workspace_access::WorkspaceAccessControlImpl;
 
@@ -165,6 +168,7 @@ pub async fn run_actix_server(
       .service(metrics_scope())
       .service(search_scope())
       .service(template_scope())
+      .service(admin_scope(state.access_control.clone()))
       .app_data(Data::new(state.metrics.registry.clone()))
       .app_data(Data::new(state.metrics.request_metrics.clone()))
       .app_data(Data::new(state.metrics.realtime_metrics.clone()))
@@ -375,6 +379,20 @@ async fn setup_admin_account(
           } else {
             info!("Admin user created and set role to supabase_admin");
           }
+
+          sqlx::query!(
+            r#"
+            INSERT INTO af_policy (subject, object, action)
+            VALUES ($1, $2, $3)
+            ON CONFLICT DO NOTHING
+            "#,
+            user_id.to_string(),
+            ObjectType::Admin.policy_object(),
+            ActionVariant::FromRole(&AFRole::Owner).to_enforce_act(),
+          )
+          .execute(pg_pool)
+          .await
+          .context("failed to grant admin role to the admin user")?;
 
           Ok(gotrue_admin)
         },

@@ -118,6 +118,13 @@ impl TryFrom<AFUserProfileRow> for AFUserProfile {
   }
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct AFPolicyRow {
+  pub subject: String,
+  pub object: String,
+  pub action: String,
+}
+
 #[derive(FromRow, Serialize, Deserialize)]
 pub struct AFWorkspaceMemberPermRow {
   pub uid: i64,

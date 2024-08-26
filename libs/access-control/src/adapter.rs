@@ -1,6 +1,8 @@
 use crate::access::ObjectType;
 
 use async_trait::async_trait;
+use database::pg_row::AFPolicyRow;
+use database::policy::select_policy_stream;
 
 use crate::metrics::AccessControlMetrics;
 use casbin::Adapter;
@@ -56,6 +58,18 @@ async fn load_collab_policies(
   }
 
   Ok(policies)
+}
+
+async fn load_general_policies(
+  mut stream: BoxStream<'_, sqlx::Result<AFPolicyRow>>,
+) -> Vec<Vec<String>> {
+  let mut policies: Vec<Vec<String>> = Vec::new();
+
+  while let Some(Ok(policy)) = stream.next().await {
+    let policy = vec![policy.subject, policy.object, policy.action];
+    policies.push(policy);
+  }
+  policies
 }
 
 /// Loads workspace policies from a given stream of workspace member permissions.
@@ -131,9 +145,12 @@ impl Adapter for PgAdapter {
 
     let collab_member_access_lv_stream = select_collab_member_access_level(&self.pg_pool);
     let collab_policies = load_collab_policies(collab_member_access_lv_stream).await?;
-
     // Policy definition `p` of type `p`. See `model.conf`
     model.add_policies("p", "p", collab_policies);
+
+    let policy_stream = select_policy_stream(&self.pg_pool);
+    let general_policies = load_general_policies(policy_stream).await;
+    model.add_policies("p", "p", general_policies);
 
     self
       .access_control_metrics

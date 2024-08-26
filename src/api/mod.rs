@@ -2,6 +2,7 @@ pub mod ai;
 pub mod chat;
 pub mod file_storage;
 
+pub mod admin;
 pub mod history;
 pub mod metrics;
 pub mod search;

@@ -1,6 +1,7 @@
 use access_control::access::{casbin_model, cmp_role_or_level, ObjectType};
 use access_control::act::{Action, ActionVariant};
 use access_control::enforcer::{AFEnforcer, EnforcerGroup, NoEnforceGroup};
+use access_control::request::PolicyRequest;
 use async_trait::async_trait;
 use casbin::rhai::ImmutableString;
 use casbin::{CoreApi, MemoryAdapter};
@@ -582,4 +583,26 @@ async fn cmp_read_only_level_test() {
         .unwrap());
     }
   }
+}
+
+#[tokio::test]
+async fn enforce_policy_request_test() {
+  let enforcer = test_enforcer(NoEnforceGroup).await;
+  enforcer
+    .update_policy(
+      &1,
+      ObjectType::Admin,
+      ActionVariant::FromRole(&AFRole::Owner),
+    )
+    .await
+    .unwrap();
+  let has_permission = enforcer
+    .enforce_policy(PolicyRequest {
+      uid: 1,
+      object_type: &ObjectType::Admin,
+      action: &ActionVariant::FromRole(&AFRole::Owner),
+    })
+    .await
+    .unwrap();
+  assert!(has_permission)
 }

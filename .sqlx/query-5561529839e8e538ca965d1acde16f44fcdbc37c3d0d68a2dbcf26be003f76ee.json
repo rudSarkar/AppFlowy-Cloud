@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO af_policy (subject, object, action)\n            VALUES ($1, $2, $3)\n            ON CONFLICT DO NOTHING\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "5561529839e8e538ca965d1acde16f44fcdbc37c3d0d68a2dbcf26be003f76ee"
+}

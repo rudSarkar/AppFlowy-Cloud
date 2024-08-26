@@ -4,5 +4,5 @@ mod adapter;
 pub mod collab;
 pub mod enforcer;
 pub mod metrics;
-mod request;
+pub mod request;
 pub mod workspace;
