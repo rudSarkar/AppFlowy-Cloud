@@ -34,7 +34,7 @@ impl CollabAccessControl for CollabAccessControlImpl {
   ) -> Result<bool, AppError> {
     self
       .access_control
-      .enforce(
+      .enforce_workspace_policy(
         workspace_id,
         uid,
         ObjectType::Collab(oid),
@@ -52,7 +52,7 @@ impl CollabAccessControl for CollabAccessControlImpl {
   ) -> Result<bool, AppError> {
     self
       .access_control
-      .enforce(
+      .enforce_workspace_policy(
         workspace_id,
         uid,
         ObjectType::Collab(oid),
@@ -124,7 +124,7 @@ impl RealtimeCollabAccessControlImpl {
     if enable_access_control() {
       let is_permitted = self
         .access_control
-        .enforce(
+        .enforce_workspace_policy(
           workspace_id,
           uid,
           ObjectType::Collab(oid),

@@ -106,7 +106,7 @@ impl AccessControl {
     }
   }
 
-  pub async fn enforce(
+  pub async fn enforce_workspace_policy(
     &self,
     workspace_id: &str,
     uid: &i64,
