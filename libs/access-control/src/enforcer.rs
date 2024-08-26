@@ -119,7 +119,7 @@ where
       .fetch_add(1, Ordering::Relaxed);
 
     // 1. First, check workspace-level permissions.
-    let workspace_policy_request = WorkspacePolicyRequest::new(workspace_id, uid, &obj, &act);
+    let workspace_policy_request = WorkspacePolicyRequest::new(workspace_id, uid, &act);
     let policy = workspace_policy_request.to_policy();
     let mut result = self
       .enforcer

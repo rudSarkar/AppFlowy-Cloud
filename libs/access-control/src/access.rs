@@ -263,6 +263,9 @@ pub enum ObjectType<'id> {
   Workspace(&'id str),
   /// Stored as `collab::<uuid>`
   Collab(&'id str),
+  Template(Option<String>),
+  TemplateCreator(Option<String>),
+  TemplateCategory(Option<String>),
 }
 
 impl ObjectType<'_> {
@@ -270,6 +273,18 @@ impl ObjectType<'_> {
     match self {
       ObjectType::Collab(s) => format!("collab::{}", s),
       ObjectType::Workspace(s) => format!("workspace::{}", s),
+      ObjectType::Template(s) => s
+        .as_ref()
+        .map(|s| format!("template::{}", s))
+        .unwrap_or("template".to_string()),
+      ObjectType::TemplateCreator(s) => s
+        .as_ref()
+        .map(|s| format!("template_creator::{}", s))
+        .unwrap_or("template_creator".to_string()),
+      ObjectType::TemplateCategory(s) => s
+        .as_ref()
+        .map(|s| format!("template_category::{}", s))
+        .unwrap_or("template_category".to_string()),
     }
   }
 
@@ -277,6 +292,9 @@ impl ObjectType<'_> {
     match self {
       ObjectType::Collab(s) => s,
       ObjectType::Workspace(s) => s,
+      ObjectType::Template(s) => s.as_deref().unwrap_or(""),
+      ObjectType::TemplateCreator(s) => s.as_deref().unwrap_or(""),
+      ObjectType::TemplateCategory(s) => s.as_deref().unwrap_or(""),
     }
   }
 }
