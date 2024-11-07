@@ -1787,6 +1787,5 @@ async fn fetch_embeddings(
   for (i, embeddings) in results.into_iter().enumerate() {
     params[i].embeddings = embeddings;
   }
-
   Ok(())
 }
